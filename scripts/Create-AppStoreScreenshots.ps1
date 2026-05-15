@@ -1,13 +1,19 @@
+param(
+    [int]$Width = 1290,
+    [int]$Height = 2796,
+    [string]$OutputSubdir = "en-US"
+)
+
 Add-Type -AssemblyName System.Drawing
 
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
-$outDir = Join-Path $root "fastlane\screenshots\en-US"
+$outDir = Join-Path $root "fastlane\screenshots\$OutputSubdir"
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 
-$W = 1290
-$H = 2796
+$W = $Width
+$H = $Height
 
 function ColorFromHex([string]$hex) {
     $h = $hex.TrimStart("#")
