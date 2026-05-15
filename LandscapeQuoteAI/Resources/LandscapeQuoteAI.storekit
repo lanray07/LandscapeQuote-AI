@@ -1,0 +1,65 @@
+{
+  "identifier" : "landscapequote-ai-local-storekit",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA"
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "landscapequote-ai-pro",
+      "localizations" : [
+        {
+          "description" : "LandscapeQuote AI Pro subscriptions",
+          "displayName" : "LandscapeQuote AI Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "LandscapeQuote AI Pro",
+      "subscriptions" : [
+        {
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "localizations" : [
+            {
+              "description" : "Unlimited quotes, PDF export, photo uploads, and AI upsell suggestions.",
+              "displayName" : "Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "landscapequote.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "landscapequote-ai-pro"
+        },
+        {
+          "displayPrice" : "79.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "localizations" : [
+            {
+              "description" : "Unlimited quotes, PDF export, photo uploads, and AI upsell suggestions with yearly savings.",
+              "displayName" : "Pro Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "landscapequote.pro.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Yearly",
+          "subscriptionGroupID" : "landscapequote-ai-pro"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

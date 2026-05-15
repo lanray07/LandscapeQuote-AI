@@ -1,6 +1,20 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Build and upload a release archive to App Store Connect"
+  lane :beta do
+    build_app(
+      project: "LandscapeQuoteAI.xcodeproj",
+      scheme: "LandscapeQuoteAI",
+      export_method: "app-store-connect",
+      export_options: "ExportOptions.plist"
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: false
+    )
+  end
+
   desc "Upload App Store Connect metadata only"
   lane :metadata do
     deliver(
@@ -10,5 +24,11 @@ platform :ios do
       skip_screenshots: true,
       submit_for_review: false
     )
+  end
+
+  desc "Upload metadata and the latest build, but do not submit for review"
+  lane :release_candidate do
+    beta
+    metadata
   end
 end

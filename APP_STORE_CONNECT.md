@@ -119,3 +119,21 @@ Pro unlocks unlimited quote creation, PDF export, site photo uploads, and AI ups
 7. Upload the archive to App Store Connect.
 8. Fill screenshots, age rating, pricing, privacy questionnaire, and subscription availability.
 9. Attach subscriptions to the first app version before submitting for review.
+
+## Local Release Helpers
+
+This repo includes:
+
+- `LandscapeQuoteAI/Resources/PrivacyInfo.xcprivacy` for the app privacy manifest.
+- `LandscapeQuoteAI/Resources/LandscapeQuoteAI.storekit` for local StoreKit product testing in Xcode.
+- `ExportOptions.plist` for App Store Connect upload exports.
+- `fastlane/Fastfile` with:
+  - `fastlane ios metadata` to upload metadata only.
+  - `fastlane ios beta` to archive and upload to TestFlight/App Store Connect from macOS.
+  - `fastlane ios release_candidate` to run both.
+
+Before using fastlane, fill in `fastlane/Appfile` with the Apple ID, Apple Developer Team ID, and App Store Connect team ID.
+
+## Current Local Limits
+
+Codex prepared the repository and metadata but cannot create the App Store Connect app record or upload a binary from this Windows workspace because those steps require Apple Developer account access and macOS/Xcode signing tools.
