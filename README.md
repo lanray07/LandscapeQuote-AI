@@ -1,19 +1,19 @@
 # LandscapeQuote AI
 
-LandscapeQuote AI is a SwiftUI MVP for landscaping contractors who need to turn rough measurements, site notes, and optional photos into professional client-ready estimates.
+LandscapeQuote AI is a SwiftUI app for landscaping contractors who need to turn rough measurements, site notes, and optional photos into professional client-ready estimates.
 
 ## Included
 
 - SwiftUI iOS app with onboarding, dashboard, project library, settings, and paywall.
 - SwiftData local persistence for projects, line items, photos, quote status, notes, and pricing.
 - Local `MockAIQuoteService` with clean service boundaries for a future OpenAI-backed estimator.
-- StoreKit 2 subscription manager using placeholder product IDs:
+- StoreKit 2 subscription manager using App Store Connect product IDs:
   - `landscapequote.pro.monthly`
   - `landscapequote.pro.yearly`
 - PDF export service for client-ready quotes with terms, totals, and a signature line.
 - Privacy wording for photos, client details, quote data, and Apple in-app purchase handling.
 
-## MVP Notes
+## Release Notes
 
 - Real computer vision, LiDAR measurement, and OpenAI integration are intentionally left as TODOs.
 - No login is required.

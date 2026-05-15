@@ -238,7 +238,7 @@ struct EstimateFlowView: View {
                 .font(.headline)
                 .foregroundStyle(AppTheme.text)
 
-            Text("Uses a local mock estimator for this MVP. OpenAI can be wired into the service later without rewriting the quote builder.")
+            Text("Generates a local first-pass estimate that you can review and edit before saving.")
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.mutedText)
 
@@ -262,7 +262,7 @@ struct EstimateFlowView: View {
                 .font(.headline)
                 .foregroundStyle(AppTheme.text)
 
-            Text("The project, line items, photos, and quote data are stored locally on this device for the MVP.")
+            Text("The project, line items, photos, and quote data are stored locally on this device.")
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.mutedText)
 

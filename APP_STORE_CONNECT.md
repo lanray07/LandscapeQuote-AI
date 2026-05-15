@@ -11,7 +11,7 @@ Use this file when creating the App Store Connect app record and subscription pr
 - Primary language: English (U.S.)
 - Category: Business
 - Pricing: Free with auto-renewable subscriptions
-- App privacy: Data Not Collected for this MVP, because photos, client details, quote notes, and project data are stored locally on-device and are not sent to a developer server.
+- App privacy: Data Not Collected for this release, because photos, client details, quote notes, and project data are stored locally on-device and are not sent to a developer server.
 
 Important: The Bundle ID in App Store Connect must match the Xcode project bundle ID before uploading a build.
 
@@ -34,7 +34,7 @@ Description:
 ```text
 LandscapeQuote AI helps landscaping contractors, gardeners, paving installers, artificial grass installers, and grounds maintenance teams prepare client-ready quotes faster.
 
-Capture client details, site address, project type, rough measurements, and optional photos. The MVP includes a local quote generator that produces editable materials, labour, waste allowance, margin, timeline, upsell ideas, and contractor notes.
+Capture client details, site address, project type, rough measurements, and optional photos. The app includes a local quote generator that produces editable materials, labour, waste allowance, margin, timeline, upsell ideas, and contractor notes.
 
 Build clean estimates for lawn mowing, artificial grass, patio paving, garden clearance, fencing, decking, hedge trimming, drainage, and full garden makeovers.
 
@@ -46,7 +46,7 @@ Key features:
 - Manage business profile, labour rate, profit margin, tax rate, and currency
 - Upgrade to Pro for unlimited quotes, PDF export, photo uploads, and AI upsell suggestions
 
-This MVP does not perform real computer vision measurement or send project photos to an external AI service.
+This version does not perform real computer vision measurement or send project photos to an external AI service.
 ```
 
 Keywords:
@@ -76,15 +76,13 @@ https://github.com/lanray07/LandscapeQuote-AI
 ## Review Notes
 
 ```text
-LandscapeQuote AI is a SwiftUI MVP for contractors to create local landscaping estimates.
+LandscapeQuote AI is a SwiftUI app for contractors to create local landscaping estimates.
 
 No login is required.
 No external payment links are included.
 Subscriptions use StoreKit 2.
-The app stores client details, quote data, and project photos locally on-device for this MVP.
-The current AI estimator is a local mock service. It does not send photos or client details to an external AI API.
-
-Debug builds include a demo Pro access button on the paywall. Release builds do not include that debug-only control.
+The app stores client details, quote data, and project photos locally on-device.
+The current estimate generator runs locally. It does not send photos or client details to an external AI API.
 ```
 
 ## Auto-Renewable Subscriptions

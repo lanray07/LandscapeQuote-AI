@@ -43,7 +43,7 @@ final class StoreKitManager {
             await updateCustomerProductStatus()
             errorMessage = nil
         } catch {
-            errorMessage = "StoreKit products could not be loaded. Configure the placeholder IDs in App Store Connect or an Xcode StoreKit file."
+            errorMessage = "Subscriptions are temporarily unavailable. Please try again later."
         }
     }
 

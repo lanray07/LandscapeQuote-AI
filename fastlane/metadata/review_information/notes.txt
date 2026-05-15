@@ -1,9 +1,7 @@
-LandscapeQuote AI is a SwiftUI MVP for contractors to create local landscaping estimates.
+LandscapeQuote AI is a SwiftUI app for contractors to create local landscaping estimates.
 
 No login is required.
 No external payment links are included.
 Subscriptions use StoreKit 2.
-The app stores client details, quote data, and project photos locally on-device for this MVP.
-The current AI estimator is a local mock service. It does not send photos or client details to an external AI API.
-
-Debug builds include a demo Pro access button on the paywall. Release builds do not include that debug-only control.
+The app stores client details, quote data, and project photos locally on-device.
+The current estimate generator runs locally. It does not send photos or client details to an external AI API.

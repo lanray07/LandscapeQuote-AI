@@ -72,13 +72,13 @@ struct PaywallView: View {
             if let monthly = storeKitManager.products.first(where: { $0.id == StoreKitManager.monthlyProductID }) {
                 productCard(monthly, title: "Pro Monthly", systemImage: "calendar")
             } else {
-                placeholderPlan(title: "Pro Monthly", price: "landscapequote.pro.monthly", systemImage: "calendar")
+                unavailablePlan(title: "Pro Monthly", systemImage: "calendar")
             }
 
             if let yearly = storeKitManager.products.first(where: { $0.id == StoreKitManager.yearlyProductID }) {
                 productCard(yearly, title: "Pro Yearly", systemImage: "calendar.badge.clock")
             } else {
-                placeholderPlan(title: "Pro Yearly", price: "landscapequote.pro.yearly", systemImage: "calendar.badge.clock")
+                unavailablePlan(title: "Pro Yearly", systemImage: "calendar.badge.clock")
             }
 
             Button("Restore Purchases") {
@@ -135,14 +135,14 @@ struct PaywallView: View {
         }
     }
 
-    private func placeholderPlan(title: String, price: String, systemImage: String) -> some View {
+    private func unavailablePlan(title: String, systemImage: String) -> some View {
         PlanCard(
             title: title,
-            price: price,
+            price: "Unavailable",
             systemImage: systemImage,
             features: ["Unlimited quotes", "PDF export", "Photo uploads", "AI upsell suggestions"],
-            buttonTitle: "Configure in App Store Connect",
-            isPrimary: true,
+            buttonTitle: "Try again later",
+            isPrimary: false,
             isLoading: false,
             action: {}
         )

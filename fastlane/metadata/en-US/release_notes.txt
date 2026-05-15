@@ -1,1 +1,1 @@
-Initial MVP release for creating local landscaping estimates, editing quote line items, saving projects, and exporting professional PDF quotes with Pro.
+Initial release for creating local landscaping estimates, editing quote line items, saving projects, and exporting professional PDF quotes with Pro.

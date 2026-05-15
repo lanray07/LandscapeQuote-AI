@@ -2,11 +2,11 @@
 
 Effective date: May 15, 2026
 
-LandscapeQuote AI is an MVP iOS app for creating landscaping estimates.
+LandscapeQuote AI is an iOS app for creating landscaping estimates.
 
 ## Photos
 
-Site photos selected from the camera or photo library are stored locally on your device. In this MVP, photos are not uploaded to a developer server and are not sent to an external AI service.
+Site photos selected from the camera or photo library are stored locally on your device. In this version, photos are not uploaded to a developer server and are not sent to an external AI service.
 
 ## Client Details
 
@@ -22,7 +22,7 @@ Subscriptions are handled through Apple's StoreKit in-app purchase flow. The iOS
 
 ## Data Collection
 
-This MVP does not collect analytics, advertising identifiers, tracking data, or developer-hosted account data.
+This version does not collect analytics, advertising identifiers, tracking data, or developer-hosted account data.
 
 ## Contact
 

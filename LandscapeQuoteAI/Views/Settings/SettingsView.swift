@@ -72,7 +72,7 @@ private struct PrivacyPolicyView: View {
 
                 privacyBlock(
                     title: "Photos",
-                    body: "Site photos are stored locally on this device for the MVP and are used only to help prepare landscaping estimates. Photo uploads are not sent to an external AI service in this version."
+                    body: "Site photos are stored locally on this device and are used only to help prepare landscaping estimates. Photo uploads are not sent to an external AI service in this version."
                 )
 
                 privacyBlock(
@@ -117,7 +117,7 @@ private struct TermsPlaceholderView: View {
                 Text("Terms")
                     .font(.largeTitle.bold())
 
-                Text("This MVP includes placeholder terms for demo and App Store review preparation. Add your final legal terms before release.")
+                Text("These terms explain how estimates are prepared and should be reviewed before being sent to a client.")
                     .font(.body)
                     .foregroundStyle(AppTheme.mutedText)
                     .appCard()
