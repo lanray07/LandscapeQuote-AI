@@ -1,0 +1,15 @@
+LandscapeQuote AI helps landscaping contractors, gardeners, paving installers, artificial grass installers, and grounds maintenance teams prepare client-ready quotes faster.
+
+Capture client details, site address, project type, rough measurements, and optional photos. The MVP includes a local quote generator that produces editable materials, labour, waste allowance, margin, timeline, upsell ideas, and contractor notes.
+
+Build clean estimates for lawn mowing, artificial grass, patio paving, garden clearance, fencing, decking, hedge trimming, drainage, and full garden makeovers.
+
+Key features:
+- Create and save landscaping quotes locally
+- Track draft, sent, approved, and rejected projects
+- Edit line items, quantities, labour, markup, VAT/tax, discounts, and final price
+- Export professional PDF quotes with terms and signature line
+- Manage business profile, labour rate, profit margin, tax rate, and currency
+- Upgrade to Pro for unlimited quotes, PDF export, photo uploads, and AI upsell suggestions
+
+This MVP does not perform real computer vision measurement or send project photos to an external AI service.
