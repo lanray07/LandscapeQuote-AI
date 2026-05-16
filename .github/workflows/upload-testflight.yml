@@ -12,6 +12,9 @@ jobs:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_API_KEY_P8_BASE64: ${{ secrets.ASC_API_KEY_P8_BASE64 }}
+      IOS_DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_BASE64 }}
+      IOS_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+      SIGNING_KEYCHAIN_PASSWORD: ${{ secrets.SIGNING_KEYCHAIN_PASSWORD }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -43,6 +46,35 @@ jobs:
           mkdir -p private_keys
           ruby -rbase64 -e 'File.binwrite("private_keys/AuthKey_#{ENV.fetch("ASC_KEY_ID")}.p8", Base64.decode64(ENV.fetch("ASC_API_KEY_P8_BASE64")))'
           echo "ASC_KEY_FILE=$PWD/private_keys/AuthKey_${ASC_KEY_ID}.p8" >> "$GITHUB_ENV"
+
+      - name: Import distribution certificate
+        run: |
+          missing=0
+          for name in IOS_DISTRIBUTION_CERTIFICATE_BASE64 IOS_DISTRIBUTION_CERTIFICATE_PASSWORD SIGNING_KEYCHAIN_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            echo "Add the missing signing secrets in GitHub: Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+          cert_path="$RUNNER_TEMP/ios_distribution.p12"
+          keychain_path="$RUNNER_TEMP/app-signing.keychain-db"
+
+          ruby -rbase64 -e 'File.binwrite(ARGV.fetch(0), Base64.decode64(ENV.fetch("IOS_DISTRIBUTION_CERTIFICATE_BASE64")))' "$cert_path"
+          security create-keychain -p "$SIGNING_KEYCHAIN_PASSWORD" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$SIGNING_KEYCHAIN_PASSWORD" "$keychain_path"
+          security import "$cert_path" -P "$IOS_DISTRIBUTION_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+          security list-keychains -d user -s "$keychain_path" $(security list-keychains -d user | tr -d '"')
+          security default-keychain -d user -s "$keychain_path"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$SIGNING_KEYCHAIN_PASSWORD" "$keychain_path"
+
+          echo "SIGNING_KEYCHAIN_PATH=$keychain_path" >> "$GITHUB_ENV"
 
       - name: Archive and upload to TestFlight
         run: bundle exec fastlane ios beta
