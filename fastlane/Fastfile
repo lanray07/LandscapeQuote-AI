@@ -1,7 +1,24 @@
 default_platform(:ios)
 
+require "shellwords"
+
 def env_present?(key)
   ENV[key].to_s.length.positive?
+end
+
+def repo_root
+  File.expand_path("..", __dir__)
+end
+
+def repo_path(*parts)
+  File.join(repo_root, *parts)
+end
+
+def expanded_env_path(key)
+  path = ENV[key].to_s
+  return path if path.start_with?("/")
+
+  File.expand_path(path, repo_root)
 end
 
 def provisioning_xcargs(include_team:)
@@ -9,7 +26,7 @@ def provisioning_xcargs(include_team:)
   args << "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']}" if include_team && env_present?("APPLE_TEAM_ID")
 
   if env_present?("ASC_KEY_FILE") && env_present?("ASC_KEY_ID") && env_present?("ASC_ISSUER_ID")
-    args << "-authenticationKeyPath #{File.expand_path(ENV['ASC_KEY_FILE'])}"
+    args << "-authenticationKeyPath #{Shellwords.escape(expanded_env_path('ASC_KEY_FILE'))}"
     args << "-authenticationKeyID #{ENV['ASC_KEY_ID']}"
     args << "-authenticationKeyIssuerID #{ENV['ASC_ISSUER_ID']}"
   end
@@ -31,7 +48,7 @@ platform :ios do
       app_store_connect_api_key(
         key_id: ENV["ASC_KEY_ID"],
         issuer_id: ENV["ASC_ISSUER_ID"],
-        key_filepath: ENV["ASC_KEY_FILE"],
+        key_filepath: expanded_env_path("ASC_KEY_FILE"),
         duration: 1200,
         in_house: false
       )
@@ -42,7 +59,7 @@ platform :ios do
 
   desc "Build the app on CI without code signing"
   lane :ci_build do
-    sh("xcodebuild -project LandscapeQuoteAI.xcodeproj -scheme LandscapeQuoteAI -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build")
+    sh("xcodebuild -project #{Shellwords.escape(repo_path('LandscapeQuoteAI.xcodeproj'))} -scheme LandscapeQuoteAI -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build")
   end
 
   desc "Build and upload a release archive to App Store Connect"
@@ -52,13 +69,13 @@ platform :ios do
     UI.user_error!("Set ASC_KEY_ID, ASC_ISSUER_ID, and ASC_KEY_FILE before uploading to TestFlight.") unless api_key
 
     build_app(
-      project: "LandscapeQuoteAI.xcodeproj",
+      project: repo_path("LandscapeQuoteAI.xcodeproj"),
       scheme: "LandscapeQuoteAI",
       configuration: "Release",
       clean: true,
       destination: "generic/platform=iOS",
       export_method: "app-store",
-      export_options: "ExportOptions.plist",
+      export_options: repo_path("ExportOptions.plist"),
       export_team_id: ENV["APPLE_TEAM_ID"],
       xcargs: signing_xcargs,
       export_xcargs: export_signing_xcargs
@@ -75,7 +92,7 @@ platform :ios do
     api_key = app_store_api_key_from_env
     options = {
       app_identifier: "com.landscapequoteai.app",
-      metadata_path: "./fastlane/metadata",
+      metadata_path: repo_path("fastlane", "metadata"),
       skip_binary_upload: true,
       skip_screenshots: true,
       submit_for_review: false

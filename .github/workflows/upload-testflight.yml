@@ -33,7 +33,7 @@ jobs:
           test -n "$ASC_API_KEY_P8_BASE64"
           mkdir -p private_keys
           ruby -rbase64 -e 'File.binwrite("private_keys/AuthKey_#{ENV.fetch("ASC_KEY_ID")}.p8", Base64.decode64(ENV.fetch("ASC_API_KEY_P8_BASE64")))'
-          echo "ASC_KEY_FILE=private_keys/AuthKey_${ASC_KEY_ID}.p8" >> "$GITHUB_ENV"
+          echo "ASC_KEY_FILE=$PWD/private_keys/AuthKey_${ASC_KEY_ID}.p8" >> "$GITHUB_ENV"
 
       - name: Archive and upload to TestFlight
         run: bundle exec fastlane ios beta
