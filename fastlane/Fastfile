@@ -46,10 +46,6 @@ def signing_xcargs(profile_name:)
   ].join(" ")
 end
 
-def export_signing_xcargs
-  provisioning_xcargs(include_team: false)
-end
-
 def signing_keychain_options
   return {} unless env_present?("SIGNING_KEYCHAIN_PATH")
 
@@ -123,8 +119,7 @@ platform :ios do
       },
       export_team_id: ENV["APPLE_TEAM_ID"],
       skip_profile_detection: true,
-      xcargs: signing_xcargs(profile_name: profile_name),
-      export_xcargs: export_signing_xcargs
+      xcargs: signing_xcargs(profile_name: profile_name)
     )
 
     upload_to_testflight(
