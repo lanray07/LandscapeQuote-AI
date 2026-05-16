@@ -35,11 +35,19 @@ def provisioning_xcargs(include_team:)
 end
 
 def signing_xcargs
-  provisioning_xcargs(include_team: true)
+  [
+    provisioning_xcargs(include_team: true),
+    "CODE_SIGN_STYLE=Automatic",
+    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution")
+  ].join(" ")
 end
 
 def export_signing_xcargs
-  provisioning_xcargs(include_team: false)
+  [
+    provisioning_xcargs(include_team: false),
+    "CODE_SIGN_STYLE=Automatic",
+    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution")
+  ].join(" ")
 end
 
 platform :ios do
