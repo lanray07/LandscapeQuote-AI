@@ -2,6 +2,8 @@ default_platform(:ios)
 
 require "shellwords"
 
+APP_IDENTIFIER = "com.landscapequoteai.app"
+
 def env_present?(key)
   ENV[key].to_s.length.positive?
 end
@@ -34,20 +36,17 @@ def provisioning_xcargs(include_team:)
   args.join(" ")
 end
 
-def signing_xcargs
+def signing_xcargs(profile_name:)
   [
     provisioning_xcargs(include_team: true),
-    "CODE_SIGN_STYLE=Automatic",
-    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution")
+    "CODE_SIGN_STYLE=Manual",
+    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution"),
+    Shellwords.escape("PROVISIONING_PROFILE_SPECIFIER=#{profile_name}")
   ].join(" ")
 end
 
 def export_signing_xcargs
-  [
-    provisioning_xcargs(include_team: false),
-    "CODE_SIGN_STYLE=Automatic",
-    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution")
-  ].join(" ")
+  provisioning_xcargs(include_team: false)
 end
 
 platform :ios do
@@ -76,6 +75,24 @@ platform :ios do
     UI.user_error!("Set APPLE_TEAM_ID before uploading to TestFlight.") unless env_present?("APPLE_TEAM_ID")
     UI.user_error!("Set ASC_KEY_ID, ASC_ISSUER_ID, and ASC_KEY_FILE before uploading to TestFlight.") unless api_key
 
+    setup_ci if ENV["CI"]
+
+    cert(
+      api_key: api_key,
+      team_id: ENV["APPLE_TEAM_ID"],
+      generate_apple_certs: true
+    )
+
+    sigh(
+      api_key: api_key,
+      app_identifier: APP_IDENTIFIER,
+      team_id: ENV["APPLE_TEAM_ID"],
+      force: true
+    )
+
+    profile_name = lane_context[SharedValues::SIGH_NAME]
+    UI.user_error!("Could not determine the App Store provisioning profile name.") unless profile_name.to_s.length.positive?
+
     build_app(
       project: repo_path("LandscapeQuoteAI.xcodeproj"),
       scheme: "LandscapeQuoteAI",
@@ -83,9 +100,19 @@ platform :ios do
       clean: true,
       destination: "generic/platform=iOS",
       export_method: "app-store",
-      export_options: repo_path("ExportOptions.plist"),
+      export_options: {
+        destination: "upload",
+        method: "app-store",
+        signingStyle: "manual",
+        provisioningProfiles: {
+          APP_IDENTIFIER => profile_name
+        },
+        stripSwiftSymbols: true,
+        uploadSymbols: true
+      },
       export_team_id: ENV["APPLE_TEAM_ID"],
-      xcargs: signing_xcargs,
+      skip_profile_detection: true,
+      xcargs: signing_xcargs(profile_name: profile_name),
       export_xcargs: export_signing_xcargs
     )
 
@@ -99,7 +126,7 @@ platform :ios do
   lane :metadata do
     api_key = app_store_api_key_from_env
     options = {
-      app_identifier: "com.landscapequoteai.app",
+      app_identifier: APP_IDENTIFIER,
       metadata_path: repo_path("fastlane", "metadata"),
       skip_binary_upload: true,
       skip_screenshots: true,
