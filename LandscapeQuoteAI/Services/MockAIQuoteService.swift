@@ -12,6 +12,7 @@ enum EstimateError: LocalizedError {
 }
 
 struct MockAIQuoteService {
+    @MainActor
     func generateEstimate(
         for draft: EstimateDraft,
         settings: AppSettings,

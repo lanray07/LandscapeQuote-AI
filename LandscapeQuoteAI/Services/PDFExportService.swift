@@ -12,6 +12,7 @@ enum PDFExportError: LocalizedError {
     }
 }
 
+@MainActor
 final class PDFExportService {
     func export(project: QuoteProject, settings: AppSettings) throws -> URL {
         let pageRect = CGRect(x: 0, y: 0, width: 595.2, height: 841.8)
