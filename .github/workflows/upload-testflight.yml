@@ -73,7 +73,7 @@ jobs:
           security set-keychain-settings -lut 21600 "$keychain_path"
           security unlock-keychain -p "$SIGNING_KEYCHAIN_PASSWORD" "$keychain_path"
           security import "$cert_path" -P "$IOS_DISTRIBUTION_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
-          security import "$cer_path" -A -t cert -f x509 -k "$keychain_path"
+          security import "$cer_path" -A -t cert -f x509 -k "$keychain_path" || echo "Distribution certificate already present in keychain."
           security list-keychains -d user -s "$keychain_path" $(security list-keychains -d user | tr -d '"')
           security default-keychain -d user -s "$keychain_path"
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$SIGNING_KEYCHAIN_PASSWORD" "$keychain_path"
