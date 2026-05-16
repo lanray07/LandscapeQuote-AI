@@ -59,7 +59,7 @@ platform :ios do
 
   desc "Build the app on CI without code signing"
   lane :ci_build do
-    sh("xcodebuild -project #{Shellwords.escape(repo_path('LandscapeQuoteAI.xcodeproj'))} -scheme LandscapeQuoteAI -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build")
+    sh("xcodebuild -project #{Shellwords.escape(repo_path('LandscapeQuoteAI.xcodeproj'))} -scheme LandscapeQuoteAI -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO -quiet build")
   end
 
   desc "Build and upload a release archive to App Store Connect"
