@@ -3,6 +3,7 @@ default_platform(:ios)
 require "shellwords"
 
 APP_IDENTIFIER = "com.landscapequoteai.app"
+SIGNING_IDENTITY = ENV["SIGNING_IDENTITY"].to_s.empty? ? "iPhone Distribution" : ENV["SIGNING_IDENTITY"]
 
 def env_present?(key)
   ENV[key].to_s.length.positive?
@@ -40,7 +41,7 @@ def signing_xcargs(profile_name:)
   [
     provisioning_xcargs(include_team: true),
     "CODE_SIGN_STYLE=Manual",
-    Shellwords.escape("CODE_SIGN_IDENTITY=Apple Distribution"),
+    Shellwords.escape("CODE_SIGN_IDENTITY=#{SIGNING_IDENTITY}"),
     Shellwords.escape("PROVISIONING_PROFILE_SPECIFIER=#{profile_name}")
   ].join(" ")
 end
@@ -86,7 +87,7 @@ platform :ios do
     cert(
       api_key: api_key,
       team_id: ENV["APPLE_TEAM_ID"],
-      generate_apple_certs: true,
+      generate_apple_certs: false,
       **signing_keychain_options
     )
 
