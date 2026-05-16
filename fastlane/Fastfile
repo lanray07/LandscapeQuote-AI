@@ -38,12 +38,14 @@ def provisioning_xcargs(include_team:)
 end
 
 def signing_xcargs(profile_name:)
-  [
+  args = [
     provisioning_xcargs(include_team: true),
     "CODE_SIGN_STYLE=Manual",
     Shellwords.escape("CODE_SIGN_IDENTITY=#{SIGNING_IDENTITY}"),
     Shellwords.escape("PROVISIONING_PROFILE_SPECIFIER=#{profile_name}")
-  ].join(" ")
+  ]
+  args << "CURRENT_PROJECT_VERSION=#{ENV['GITHUB_RUN_NUMBER']}" if env_present?("GITHUB_RUN_NUMBER")
+  args.join(" ")
 end
 
 def signing_keychain_options
@@ -120,11 +122,6 @@ platform :ios do
       export_team_id: ENV["APPLE_TEAM_ID"],
       skip_profile_detection: true,
       xcargs: signing_xcargs(profile_name: profile_name)
-    )
-
-    upload_to_testflight(
-      api_key: api_key,
-      skip_waiting_for_build_processing: false
     )
   end
 
