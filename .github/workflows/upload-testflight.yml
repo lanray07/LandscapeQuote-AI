@@ -27,10 +27,19 @@ jobs:
 
       - name: Prepare App Store Connect API key
         run: |
-          test -n "$APPLE_TEAM_ID"
-          test -n "$ASC_KEY_ID"
-          test -n "$ASC_ISSUER_ID"
-          test -n "$ASC_API_KEY_P8_BASE64"
+          missing=0
+          for name in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_API_KEY_P8_BASE64; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            echo "Add the missing secrets in GitHub: Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
           mkdir -p private_keys
           ruby -rbase64 -e 'File.binwrite("private_keys/AuthKey_#{ENV.fetch("ASC_KEY_ID")}.p8", Base64.decode64(ENV.fetch("ASC_API_KEY_P8_BASE64")))'
           echo "ASC_KEY_FILE=$PWD/private_keys/AuthKey_${ASC_KEY_ID}.p8" >> "$GITHUB_ENV"
