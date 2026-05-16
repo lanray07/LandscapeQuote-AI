@@ -112,11 +112,55 @@ Pro unlocks unlimited quote creation, PDF export, site photo uploads, and AI ups
 2. Create the App Store Connect app record with the Bundle ID and SKU above.
 3. Add the two auto-renewable subscription products and their localizations.
 4. Add support and privacy policy URLs.
-5. In Xcode on macOS, set the correct Apple Development Team.
-6. Archive the `LandscapeQuoteAI` scheme.
+5. In Xcode on macOS, set the correct Apple Development Team, or configure the GitHub Actions secrets below.
+6. Archive the `LandscapeQuoteAI` scheme locally or run the GitHub `Upload to TestFlight` workflow.
 7. Upload the archive to App Store Connect.
 8. Fill screenshots, age rating, pricing, privacy questionnaire, and subscription availability.
 9. Attach subscriptions to the first app version before submitting for review.
+
+## GitHub Xcode Build and TestFlight Upload
+
+This repo includes GitHub Actions workflows that run on Apple's hosted macOS/Xcode runners:
+
+- `iOS Xcode Build`: builds the app for an iOS Simulator on every push, pull request, or manual run. It does not require code signing.
+- `Upload to TestFlight`: manually archives a release build and uploads it to App Store Connect using StoreKit-ready App Store signing.
+
+Add these repository secrets in GitHub under Settings > Secrets and variables > Actions:
+
+| Secret | Purpose |
+| --- | --- |
+| `APPLE_TEAM_ID` | Apple Developer Team ID used for automatic signing |
+| `ASC_KEY_ID` | App Store Connect API key ID |
+| `ASC_ISSUER_ID` | App Store Connect API issuer ID |
+| `ASC_API_KEY_P8_BASE64` | Base64-encoded contents of the App Store Connect `.p8` private key |
+
+Optional secrets:
+
+| Secret | Purpose |
+| --- | --- |
+| `APPLE_ID` | Apple ID email used by fastlane metadata tools |
+| `ITC_TEAM_ID` | App Store Connect provider/team ID if your account has more than one team |
+
+To create `ASC_API_KEY_P8_BASE64` on macOS:
+
+```sh
+base64 -i AuthKey_XXXXXXXXXX.p8 | pbcopy
+```
+
+To create it on Windows PowerShell:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("AuthKey_XXXXXXXXXX.p8")) | Set-Clipboard
+```
+
+After the secrets are set:
+
+1. Go to GitHub Actions.
+2. Open `Upload to TestFlight`.
+3. Choose `Run workflow`.
+4. Wait for the uploaded build to appear in App Store Connect, then attach the build and subscriptions to version `1.0`.
+
+The Bundle ID must already exist in Apple Developer, and the App Store Connect API key must have permission to manage apps and provisioning.
 
 ## Local Release Helpers
 
@@ -126,12 +170,13 @@ This repo includes:
 - `LandscapeQuoteAI/Resources/LandscapeQuoteAI.storekit` for local StoreKit product testing in Xcode.
 - `ExportOptions.plist` for App Store Connect upload exports.
 - `fastlane/Fastfile` with:
+  - `fastlane ios ci_build` to run an unsigned simulator build in CI.
   - `fastlane ios metadata` to upload metadata only.
   - `fastlane ios beta` to archive and upload to TestFlight/App Store Connect from macOS.
   - `fastlane ios release_candidate` to run both.
 
-Before using fastlane, fill in `fastlane/Appfile` with the Apple ID, Apple Developer Team ID, and App Store Connect team ID.
+Before using fastlane, set the relevant environment variables or GitHub Actions secrets described above.
 
 ## Current Local Limits
 
-Codex prepared the repository and metadata but cannot create the App Store Connect app record or upload a binary from this Windows workspace because those steps require Apple Developer account access and macOS/Xcode signing tools.
+Codex prepared the repository, metadata, screenshots, and GitHub Actions automation. This Windows workspace still cannot create the App Store Connect app record or upload a binary directly because those steps require Apple Developer account access and macOS/Xcode signing tools, but the GitHub `Upload to TestFlight` workflow can do the macOS/Xcode build once the secrets are configured.

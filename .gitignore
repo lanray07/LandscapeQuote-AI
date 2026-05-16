@@ -11,6 +11,14 @@ xcuserdata/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/test_output/
+private_keys/
+*.ipa
+*.dSYM.zip
+*.xcarchive
+
+# Local secrets
+.env
+.env.*
 
 # macOS
 .DS_Store

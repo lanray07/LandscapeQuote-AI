@@ -1,4 +1,4 @@
 app_identifier("com.landscapequoteai.app")
-apple_id("")
-team_id("")
-itc_team_id("")
+apple_id(ENV["APPLE_ID"] || "")
+team_id(ENV["APPLE_TEAM_ID"] || "")
+itc_team_id(ENV["ITC_TEAM_ID"] || "")

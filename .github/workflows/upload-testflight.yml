@@ -1,0 +1,38 @@
+name: Upload to TestFlight
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    name: Archive and Upload
+    runs-on: macos-latest
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_API_KEY_P8_BASE64: ${{ secrets.ASC_API_KEY_P8_BASE64 }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Prepare App Store Connect API key
+        run: |
+          test -n "$APPLE_TEAM_ID"
+          test -n "$ASC_KEY_ID"
+          test -n "$ASC_ISSUER_ID"
+          test -n "$ASC_API_KEY_P8_BASE64"
+          mkdir -p private_keys
+          ruby -rbase64 -e 'File.binwrite("private_keys/AuthKey_#{ENV.fetch("ASC_KEY_ID")}.p8", Base64.decode64(ENV.fetch("ASC_API_KEY_P8_BASE64")))'
+          echo "ASC_KEY_FILE=private_keys/AuthKey_${ASC_KEY_ID}.p8" >> "$GITHUB_ENV"
+
+      - name: Archive and upload to TestFlight
+        run: bundle exec fastlane ios beta
