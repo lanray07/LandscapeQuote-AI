@@ -134,6 +134,7 @@ Add these repository secrets in GitHub under Settings > Secrets and variables > 
 | `ASC_ISSUER_ID` | App Store Connect API issuer ID |
 | `ASC_API_KEY_P8_BASE64` | Base64-encoded contents of the App Store Connect `.p8` private key |
 | `IOS_DISTRIBUTION_CERTIFICATE_BASE64` | Base64-encoded `.p12` Apple Distribution certificate and private key |
+| `IOS_DISTRIBUTION_CERTIFICATE_CER_BASE64` | Base64-encoded `.cer` Apple Distribution certificate matching the `.p12` private key |
 | `IOS_DISTRIBUTION_CERTIFICATE_PASSWORD` | Password for the `.p12` distribution certificate |
 | `SIGNING_KEYCHAIN_PASSWORD` | Temporary CI keychain password used while importing the distribution certificate |
 
@@ -160,6 +161,12 @@ To create `IOS_DISTRIBUTION_CERTIFICATE_BASE64` on Windows PowerShell:
 
 ```powershell
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("ios_distribution.p12")) | Set-Clipboard
+```
+
+To create `IOS_DISTRIBUTION_CERTIFICATE_CER_BASE64` on Windows PowerShell:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("ios_distribution.cer")) | Set-Clipboard
 ```
 
 After the secrets are set:
