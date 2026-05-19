@@ -11,7 +11,7 @@ struct PaywallView: View {
                 header
                 freePlan
                 proPlans
-                privacyNote
+                subscriptionTerms
             }
             .padding(16)
         }
@@ -109,11 +109,21 @@ struct PaywallView: View {
         }
     }
 
-    private var privacyNote: some View {
-        Text("No external payment links are used in the iOS app. Subscription purchases and restores are handled by Apple's StoreKit purchase sheet.")
-            .font(.footnote)
-            .foregroundStyle(AppTheme.mutedText)
-            .padding(.horizontal, 4)
+    private var subscriptionTerms: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Subscription terms")
+                .font(.headline)
+                .foregroundStyle(AppTheme.text)
+
+            Text("No external payment links are used in the iOS app. Subscription purchases and restores are handled by Apple's StoreKit purchase sheet. Auto-renewable subscriptions renew unless cancelled in your Apple ID subscriptions settings.")
+                .font(.footnote)
+                .foregroundStyle(AppTheme.mutedText)
+
+            Link("Apple Terms of Use (EULA)", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                .font(.footnote.weight(.semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .appCard()
     }
 
     private func productCard(_ product: Product, title: String, systemImage: String) -> some View {

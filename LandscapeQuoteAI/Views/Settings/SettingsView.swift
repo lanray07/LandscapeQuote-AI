@@ -126,6 +126,18 @@ private struct TermsPlaceholderView: View {
                     .font(.body)
                     .foregroundStyle(AppTheme.mutedText)
                     .appCard()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Subscriptions")
+                        .font(.headline)
+                    Text("LandscapeQuote AI uses Apple's standard Terms of Use (EULA) for auto-renewable subscriptions. Subscriptions renew unless cancelled in your Apple ID subscriptions settings.")
+                        .font(.body)
+                        .foregroundStyle(AppTheme.mutedText)
+                    Link("Apple Terms of Use (EULA)", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                        .font(.body.weight(.semibold))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .appCard()
             }
             .padding(20)
         }
